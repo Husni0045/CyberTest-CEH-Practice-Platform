@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero hero--professional">
+    <div class="hero-background" aria-hidden="true">
+        <span class="hero-orbit"></span>
+        <span class="hero-orbit hero-orbit--secondary"></span>
+    </div>
+    <div class="container hero-inner hero-layout">
+        <div class="hero-intro">
+            <span class="hero-badge">Now featuring CEHv12</span>
+            <h1 class="hero-title">What will you <span class="hero-accent">secure</span> today?</h1>
+            <p class="hero-sub">Launch exam-grade simulations that mirror the official Certified Ethical Hacker experience. Practice under timed conditions, monitor performance in real time, and review actionable insights.</p>
+            <div class="hero-stats" role="presentation">
+                <div class="stat-card">
+                    <span class="stat-value">1,200+</span>
+                    <span class="stat-label">Scenario-driven items</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">4h</span>
+                    <span class="stat-label">Adaptive timer control</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">95%</span>
+                    <span class="stat-label">Learner satisfaction</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-panel" id="examSetup">
+            <div class="panel-header">
+                <span class="panel-badge">Start in under a minute</span>
+                <h2>Configure your exam</h2>
+                <p>Select your parameters to spin up a monitored practice session instantly.</p>
+            </div>
+            <form action="/start_exam" method="POST" class="panel-form exam-setup-form">
+                <div class="panel-form-grid">
+                    <div class="panel-field">
+                        <label for="num_questions" class="field-label">Questions</label>
+                        <select name="num_questions" id="num_questions" class="setup-select">
+                            <option value="125">125 Questions · Full Exam</option>
+                            <option value="100">100 Questions</option>
+                            <option value="75">75 Questions</option>
+                            <option value="50">50 Questions</option>
+                            <option value="25">25 Questions · Quick Practice</option>
+                        </select>
+                    </div>
+                    <div class="panel-field">
+                        <span class="field-label">Exam version</span>
+                        <div class="version-wrap">
+                            <button type="button" class="version-toggle" aria-expanded="false">Version 12</button>
+                            <div class="version-controls">
+                                <fieldset class="version-group" aria-label="CEH versions" hidden>
+                                    <legend class="sr-only">CEH version</legend>
+                                    <input type="radio" id="v12" name="version" value="12">
+                                    <label class="version-pill" for="v12">Version 12 <span class="small">CEHv12</span></label>
+                                </fieldset>
+                                <p class="version-note">Additional versions coming soon.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-actions">
+                    <button type="submit" id="startExamBtn" class="btn primary start-button" disabled data-tooltip="Please select version 12 to start the exam">Start Exam</button>
+                    {% if session.get('admin') %}
+                    <a href="{{ url_for('add_question') }}" class="btn btn-secondary">Admin Panel</a>
+                    {% endif %}
+                </div>
+            </form>
+            <div class="panel-footer" aria-label="Platform highlights">
+                <ul class="panel-highlights">
+                    <li>Timed delivery with built-in break management</li>
+                    <li>Automatic scoring with domain-level analytics</li>
+                    <li>Instant access to answer justifications</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer" aria-label="CyberTest social media">
+    <div class="container footer-inner">
+        <div class="footer-copy">
+            <h2 class="footer-title">Stay connected with CyberTest</h2>
+            <p class="footer-sub">Follow us for the latest CEH insights, study resources, and platform updates.</p>
+        </div>
+        <nav class="footer-social" aria-label="Follow CyberTest">
+            <a class="social-pill social-facebook" href="https://facebook.com/yourpage" target="_blank" rel="noopener" aria-label="Follow CyberTest on Facebook">
+                <span class="social-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M14 8.5V6.75c0-.69.56-1.25 1.25-1.25H17V2h-2.25A3.75 3.75 0 0 0 11 5.75V8.5H9v3h2v9h3v-9h2.06l.44-3H14z"/></svg>
+                </span>
+                <span class="social-label">Facebook</span>
+            </a>
+            <a class="social-pill social-instagram" href="https://instagram.com/yourprofile" target="_blank" rel="noopener" aria-label="Follow CyberTest on Instagram">
+                <span class="social-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 4.5A4.5 4.5 0 1 1 7.5 13 4.5 4.5 0 0 1 12 8.5Zm0 2A2.5 2.5 0 1 0 14.5 13 2.5 2.5 0 0 0 12 10.5Zm6.25-1.75a1.25 1.25 0 1 1-1.25-1.25 1.25 1.25 0 0 1 1.25 1.25Z"/></svg>
+                </span>
+                <span class="social-label">Instagram</span>
+            </a>
+            <a class="social-pill social-x" href="https://x.com/yourhandle" target="_blank" rel="noopener" aria-label="Follow CyberTest on X">
+                <span class="social-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M4 3h4.24l4.11 5.79L16.83 3H20l-6.18 8.36L20 21h-4.24l-4.35-6.13L7.17 21H4l6.35-8.7Z"/></svg>
+                </span>
+                <span class="social-label">X</span>
+            </a>
+            <a class="social-pill social-threads" href="https://www.threads.net/@yourhandle" target="_blank" rel="noopener" aria-label="Follow CyberTest on Threads">
+                <span class="social-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 2C6.48 2 2 6.04 2 11.05 2 17.08 7.04 22 12.1 22c4.76 0 9.9-3.54 9.9-9.08C22 6.62 17.6 2 12 2Zm4.74 11.19c-.32 3.6-3 5.72-6.74 5.72-.63 0-1.36-.08-1.82-.2l.39-1.86c.32.1.95.2 1.43.2 1.8 0 3.22-.78 3.53-2.72h-2.53v-1.74h2.67c-.16-1.22-.79-2.16-2.67-2.16-.87 0-1.82.3-2.53.69l-.47-1.82c.67-.4 1.98-.83 3.32-.83 2.51 0 4.35 1.37 4.71 3.85h1.17v1.74h-.46Z"/></svg>
+                </span>
+                <span class="social-label">Threads</span>
+            </a>
+        </nav>
+    </div>
+</footer>
+{% endblock %}

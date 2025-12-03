@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+{% set total = questions|length %}
+<div class="exam-container">
+    <aside class="sidebar">
+        <div class="question-nav">
+            <h3>Questions</h3>
+            <div class="question-grid">
+                {% for i in range(1, total + 1) %}
+                    <div class="question-number" data-question="{{ i }}">{{ i }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+
+    <section class="main-content">
+        <div class="timer-banner" id="examTimer" data-total-seconds="{{ total * 60 }}">
+            <span class="timer-label">Time Remaining</span>
+            <span class="timer-countdown" id="timerDisplay">--:--</span>
+        </div>
+
+        <div class="exam-body" id="exam-area">
+            {% for q in questions %}
+                {% set question_number = loop.index %}
+                <div class="question-card {% if not loop.first %}hidden{% endif %}" data-id="{{ q._id }}" data-question-number="{{ question_number }}">
+                    <p><strong>Question {{ question_number }} of {{ total }}:</strong></p>
+                    <p class="question-text">{{ q.question }}</p>
+                    {% for option in q.options %}
+                        {% set option_id = 'q' ~ question_number ~ '_opt' ~ loop.index %}
+                        <label class="option-label" for="{{ option_id }}">
+                            <input id="{{ option_id }}" type="radio" name="q{{ question_number }}" value="{{ option }}"> {{ option }}
+                        </label>
+                    {% endfor %}
+                    <div class="question-actions">
+                        <button class="verify-btn" type="button">Verify</button>
+                        {% if not loop.first %}
+                            <button class="nav-btn prev-btn" type="button">Previous</button>
+                        {% endif %}
+                        {% if not loop.last %}
+                            <button class="nav-btn next-btn" type="button">Next</button>
+                        {% endif %}
+                    </div>
+                    <p class="result"></p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="summary-trigger" id="summaryTrigger" hidden>
+            <button id="viewSummaryBtn" class="btn" type="button" disabled>View Result</button>
+        </div>
+    </section>
+</div>
+
+<div class="modal" id="finalModal" hidden aria-hidden="true" role="dialog" aria-labelledby="modal-heading">
+    <div class="modal-content">
+        <h3 id="modal-heading">Exam summary</h3>
+        <p id="modal-message"></p>
+        <p>You answered <strong id="modal-correct">0</strong> out of <strong id="modal-total">0</strong> correctly.</p>
+        <p>Your score: <strong id="modal-score">0</strong>%</p>
+        <div class="results-graph" id="results-chart" hidden>
+            <canvas id="resultsChart"></canvas>
+        </div>
+        <div class="modal-actions">
+            <button id="closeModal" class="btn" type="button">Close</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="breakModal" hidden aria-hidden="true" aria-live="polite">
+    <div class="modal-content">
+        <h3>Quick pause</h3>
+        <p>Grab a sip of water while we get the next question ready.</p>
+        <p class="break-countdown">Resuming in <span id="breakCountdown">5</span> seconds…</p>
+    </div>
+</div>
+{% endblock %}

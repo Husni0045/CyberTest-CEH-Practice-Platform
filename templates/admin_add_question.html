@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-content" style="max-width:920px;margin:28px auto;padding:28px;">
+  <h2 class="hero-title" style="font-size:22px;margin-bottom:6px;">Add question</h2>
+  <p class="hero-sub" style="margin-bottom:14px;">Use this form to add exam questions. Fields marked required must be filled.</p>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for category, msg in messages %}
+      <li class="flash {{ category }}">{{ msg }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+
+  <form method="post" id="addQuestionForm">
+    <div class="form-group">
+      <label for="version">Version</label>
+      <select id="version" name="version" class="form-control" required>
+        <option value="">-- select version --</option>
+        {% for version in versions %}
+        <option value="{{ version }}">Version {{ version }} — CEHv{{ version }}</option>
+        {% endfor %}
+      </select>
+      {% if versions|length == 1 %}
+      <div class="hint">Additional versions will appear here as soon as their question banks are ready.</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="topic">Topic (optional)</label>
+      <input id="topic" name="topic" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="question">Question text</label>
+      <textarea id="question" name="question" class="form-control" rows="3" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Options</label>
+      <input id="opt1" name="opt1" class="form-control option-input" placeholder="Option 1" required>
+      <input id="opt2" name="opt2" class="form-control option-input" placeholder="Option 2" required style="margin-top:6px;">
+      <input id="opt3" name="opt3" class="form-control option-input" placeholder="Option 3" style="margin-top:6px;">
+      <input id="opt4" name="opt4" class="form-control option-input" placeholder="Option 4" style="margin-top:6px;">
+    </div>
+
+    <div class="form-group">
+      <label for="correct">Correct Option</label>
+      <select id="correct" name="correct" class="form-control" required>
+        <option value="">-- select correct option --</option>
+      </select>
+      <div class="hint" style="font-size:12px;color:#666;margin-top:6px;">Choose the option exactly as shown above.</div>
+    </div>
+
+    <div style="margin-top:18px;display:flex;gap:10px;align-items:center;">
+      <button type="submit" class="btn primary">Add question</button>
+      <a href="{{ url_for('admin_logout') }}" class="btn btn-secondary">Logout</a>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">Home</a>
+    </div>
+  </form>
+
+  <script>
+    // Keep the "Correct" select in sync with the option inputs so admin can't typo the correct answer.
+    (function(){
+      function updateCorrectOptions(){
+        const opts = [];
+        document.querySelectorAll('.option-input').forEach(function(inp){
+          const v = inp.value && inp.value.trim();
+          if(v) opts.push(v);
+        });
+
+        const correct = document.getElementById('correct');
+        // clear existing (except placeholder)
+        correct.innerHTML = '<option value="">-- select correct option --</option>';
+        opts.forEach(function(v){
+          const o = document.createElement('option');
+          o.value = v;
+          o.textContent = v;
+          correct.appendChild(o);
+        });
+      }
+
+      document.addEventListener('input', function(e){
+        if(e.target && e.target.classList && e.target.classList.contains('option-input')){
+          updateCorrectOptions();
+        }
+      });
+
+      // initialize on load
+      document.addEventListener('DOMContentLoaded', updateCorrectOptions);
+    })();
+  </script>
+</div>
+{% endblock %}

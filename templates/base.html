@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberTest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=5">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" crossorigin="anonymous" defer></script>
+    <script src="{{ url_for('static', filename='script.js') }}?v=5" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a href="/" class="brand" aria-label="CyberTest home">
+                <span class="brand-logo">CyberTest</span>
+                <span class="brand-tagline">CEH Exam Simulator</span>
+            </a>
+            <nav class="site-nav" aria-label="Primary navigation">
+                <div class="site-nav__links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/about" class="nav-link">About</a>
+                    {% if session.get('admin') %}
+                    <a href="{{ url_for('add_question') }}" class="nav-link nav-admin">Add Question</a>
+                    <a href="{{ url_for('admin_questions') }}" class="nav-link nav-admin">View Questions</a>
+                    <a href="{{ url_for('admin_logout') }}" class="nav-link nav-admin">Logout</a>
+                    {% endif %}
+                </div>
+                <div class="nav-theme">
+                    <button class="nav-link nav-theme-toggle" type="button" id="themeToggle" aria-haspopup="true" aria-expanded="false" aria-controls="themeMenu">Theme</button>
+                    <div class="theme-menu" id="themeMenu" hidden>
+                        <button type="button" data-theme="light">Light</button>
+                        <button type="button" data-theme="dark">Dark</button>
+                        <button type="button" data-theme="system">System default</button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

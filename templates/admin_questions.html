@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="admin-questions">
+  <div class="admin-questions__header">
+    <div>
+      <h2>Question Library</h2>
+      <p>All questions currently stored in the database (most recent first).</p>
+    </div>
+    <div class="admin-questions__actions">
+      <a href="{{ url_for('add_question') }}" class="btn primary">Add question</a>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">Home</a>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Version</th>
+          <th>Question</th>
+          <th>Options</th>
+          <th>Correct</th>
+          <th>Topic</th>
+          <th class="sticky-action">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for q in questions %}
+        <tr>
+          <td class="admin-table__code">{{ q['_id'] }}</td>
+          <td>{{ q.get('version','') }}</td>
+          <td>{{ q.get('question') }}</td>
+          <td>{{ q.get('options')|join(', ') }}</td>
+          <td>{{ q.get('correct') }}</td>
+          <td>{{ q.get('topic','') }}</td>
+          <td class="admin-table__actions">
+            <a href="{{ url_for('edit_question', question_id=q['_id']) }}" class="btn btn-outline btn-compact">Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" class="admin-table__empty">No questions found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

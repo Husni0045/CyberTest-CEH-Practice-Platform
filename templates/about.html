@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="about-disclaimer" aria-labelledby="disclaimer-title">
+    <div class="container">
+        <div class="techconsole-cta techconsole-cta--solo">
+            <span class="techconsole-logo">
+                <img src="{{ url_for('static', filename='images/techconsole-logo.png') }}" alt="TechConsole logo">
+            </span>
+            <div class="techconsole-text">
+                <p>
+                    If you want real cybersecurity training or professional services, please visit the official TechConsole website.
+                    They are the original creators and owners of the entire concept behind CyberTest.
+                </p>
+                <a class="techconsole-link" href="https://techconsole.org" target="_blank" rel="noopener">Go to techconsole.org</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-content" style="max-width:720px;margin:36px auto;padding:28px;">
+  <h2 class="hero-title" style="font-size:22px;margin-bottom:6px;">Admin login</h2>
+  <p class="hero-sub" style="margin-bottom:18px;">Sign in to manage questions for the practice exams.</p>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for category, msg in messages %}
+      <li class="flash {{ category }}">{{ msg }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+
+  <form method="post" class="admin-form">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" name="username" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" class="form-control" required>
+    </div>
+    <div style="margin-top:12px;">
+      <button type="submit" class="btn primary">Sign in</button>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">Back</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

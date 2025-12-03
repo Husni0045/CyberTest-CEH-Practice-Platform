@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-content" style="max-width:920px;margin:28px auto;padding:28px;">
+  <h2 class="hero-title" style="font-size:22px;margin-bottom:6px;">Edit question</h2>
+  <p class="hero-sub" style="margin-bottom:14px;">Update the wording or options below. Changes apply immediately after you save.</p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for category, msg in messages %}
+      <li class="flash {{ category }}">{{ msg }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+
+  <form method="post" class="admin-form" id="editQuestionForm">
+    <div class="form-group">
+      <label for="version">Version</label>
+      <select id="version" name="version" class="form-control" required>
+        {% for version in versions %}
+        <option value="{{ version }}" {% if question.version == version %}selected{% endif %}>Version {{ version }} — CEHv{{ version }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="topic">Topic (optional)</label>
+      <input id="topic" name="topic" class="form-control" value="{{ question.topic or '' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="question">Question text</label>
+      <textarea id="question" name="question" class="form-control" rows="3" required>{{ question.question }}</textarea>
+    </div>
+
+    {% set opts = question.options or [] %}
+    <div class="form-group">
+      <label>Options</label>
+      <input id="opt1" name="opt1" class="form-control option-input" placeholder="Option 1" value="{{ opts[0] if opts|length > 0 else '' }}" required>
+      <input id="opt2" name="opt2" class="form-control option-input" placeholder="Option 2" value="{{ opts[1] if opts|length > 1 else '' }}" required style="margin-top:6px;">
+      <input id="opt3" name="opt3" class="form-control option-input" placeholder="Option 3" value="{{ opts[2] if opts|length > 2 else '' }}" style="margin-top:6px;">
+      <input id="opt4" name="opt4" class="form-control option-input" placeholder="Option 4" value="{{ opts[3] if opts|length > 3 else '' }}" style="margin-top:6px;">
+    </div>
+
+    <div class="form-group">
+      <label for="correct">Correct Option</label>
+      <select id="correct" name="correct" class="form-control" required data-selected="{{ question.correct }}">
+        <option value="">-- select correct option --</option>
+      </select>
+      <div class="hint" style="font-size:12px;color:#666;margin-top:6px;">Choose the option exactly as shown above.</div>
+    </div>
+
+    <div style="margin-top:18px;display:flex;gap:10px;align-items:center;">
+      <button type="submit" class="btn primary">Save changes</button>
+      <a href="{{ url_for('admin_questions') }}" class="btn btn-secondary">Back to list</a>
+    </div>
+  </form>
+
+  <script>
+    (function(){
+      function updateCorrectOptions(){
+        const opts = [];
+        document.querySelectorAll('#editQuestionForm .option-input').forEach(function(inp){
+          const v = inp.value && inp.value.trim();
+          if(v) opts.push(v);
+        });
+        const correct = document.getElementById('correct');
+        const selected = correct.dataset.selected || '';
+        correct.innerHTML = '<option value="">-- select correct option --</option>';
+        opts.forEach(function(v){
+          const o = document.createElement('option');
+          o.value = v;
+          o.textContent = v;
+          if(v === selected) o.selected = true;
+          correct.appendChild(o);
+        });
+      }
+
+      document.addEventListener('input', function(e){
+        if(e.target && e.target.classList && e.target.classList.contains('option-input')){
+          updateCorrectOptions();
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', updateCorrectOptions);
+    })();
+  </script>
+</div>
+{% endblock %}
